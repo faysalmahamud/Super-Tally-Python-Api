@@ -1,0 +1,23 @@
+;;BILLSR2.TXT
+;;-----------
+;;TDL Code for "Bills Receivable" Report.
+;;To be used with billsr2.xml
+
+;;Objective
+;;---------
+;;The variable SHOWOPBILLAMT is set to NO in Bills Receivable Report,
+;;by default. Herein, we modify the variable value 
+
+[#Report: Bills Receivable]
+
+  ;;This is incorrect as it does allow external programs to change the
+  ;;variable value. In default TDL, it is specified this way.
+  ;;Set: ShowOpBillAmt: No
+
+  ;;This allows external programs to set the value of the variable
+  ;;programatically
+  Set: ShowOpBillAmt: ##ShowOpBillAmt
+
+[#Report: Bills Receivable]
+    Set: SVFROMDATE: ##SVFROMDATE
+    Set: SVTODATE: ##SVTODATE

@@ -1,0 +1,3 @@
+[#Report: Ledger Vouchers]
+    Set: SVFROMDATE: ##SVFROMDATE
+    Set: SVTODATE: ##SVTODATE
