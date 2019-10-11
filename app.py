@@ -2,8 +2,6 @@ from flask import Flask
 from flask import request
 from openpyxl import Workbook
 from flask_cors import CORS
-from flask_ssl import *
-
 import pyqrcode
 import openpyxl
 wb = openpyxl.load_workbook('Invoice.xlsx')
@@ -14,7 +12,7 @@ ws = wb.active
 
 app = Flask(__name__)
 CORS(app)
-@ssl_require
+
 @app.route("/")
 def hello():
     return "Hello World!s"
@@ -25,7 +23,6 @@ def hello2():
         import json
         req_data = request.get_json()
         generate_qr()
-        
         ws['A1'] = "Invoice No. "
         ws['B1'] = req_data['VoucherId']
         ws['D6'] = "Party: "+req_data['Account']
@@ -39,14 +36,15 @@ def hello2():
             ws['A'+str(j)] = str(i+1)
             ws['B'+str(j)] = v['ledgername']
             ws['G'+str(j)] = v['Amount']
- 
         img = openpyxl.drawing.image.Image('url.png')
-        img.anchor = 'B24'
+        img.anchor = 'B22'
         ws.add_image(img)
         wb.save("upload/"+req_data['VoucherId']+".xlsx")
         return req_data
-    except:
-        return "Failed"
+    except Exception as e: 
+        return str(e)
+        
+
 
 @app.route("/Tally", methods=['POST'])
 def hello3():
@@ -59,9 +57,6 @@ def hello3():
     response = requests.request("POST", url, data=data, headers=headers)
     return response.text
 
-
-
-
 def generate_qr():
     link_to_post = "https://medium.com/@ngengesenior/qr-codes-generation-with-python-377735be6c5f"
     url = pyqrcode.create(link_to_post)
@@ -71,5 +66,3 @@ def generate_qr():
 
 if __name__ == "__main__":
     app.run('0.0.0.0')
-
-
